@@ -13,19 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.quicksearchbox
+
+package com.android.quicksearchbox.ui
+
+import com.android.quicksearchbox.Suggestion
 
 /**
- * Provides a set of suggestion results for a query..
- *
+ * Interface to be implemented by any view appearing in the list of suggestions.
  */
-interface SuggestionsProvider {
+interface SuggestionView {
     /**
-     * Gets suggestions for a query.
-     *
-     * @param query The query.
-     * @param source The source to query. Must be non-null.
+     * Set the view's contents based on the given suggestion.
      */
-    fun getSuggestions(query: String, source: Source): Suggestions
-    fun close()
+    fun bindAsSuggestion(suggestion: Suggestion?, userQuery: String?)
+
+    /**
+     * Binds this view to a list adapter.
+     *
+     * @param adapter The adapter of the list which the view is appearing in
+     * @param position The position of this view with the list.
+     */
+    fun bindAdapter(adapter: SuggestionsAdapter<*>?, position: Long)
 }

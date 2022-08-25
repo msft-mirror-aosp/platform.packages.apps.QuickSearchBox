@@ -15,17 +15,27 @@
  */
 package com.android.quicksearchbox
 
+import android.content.Context
+import android.text.style.TextAppearanceSpan
+
 /**
- * Provides a set of suggestion results for a query..
- *
+ * Factory class for text appearances.
  */
-interface SuggestionsProvider {
-    /**
-     * Gets suggestions for a query.
-     *
-     * @param query The query.
-     * @param source The source to query. Must be non-null.
-     */
-    fun getSuggestions(query: String, source: Source): Suggestions
-    fun close()
+open class TextAppearanceFactory(context: Context?) {
+    private val mContext: Context?
+    open fun createSuggestionQueryTextAppearance(): Array<Any> {
+        return arrayOf(
+            TextAppearanceSpan(mContext, R.style.SuggestionText1_Query)
+        )
+    }
+
+    open fun createSuggestionSuggestedTextAppearance(): Array<Any> {
+        return arrayOf(
+            TextAppearanceSpan(mContext, R.style.SuggestionText1_Suggested)
+        )
+    }
+
+    init {
+        mContext = context
+    }
 }

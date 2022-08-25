@@ -13,19 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.quicksearchbox
+
+package com.android.quicksearchbox.util
 
 /**
- * Provides a set of suggestion results for a query..
- *
+ * A Consumer that does nothing with the objects it receives.
  */
-interface SuggestionsProvider {
-    /**
-     * Gets suggestions for a query.
-     *
-     * @param query The query.
-     * @param source The source to query. Must be non-null.
-     */
-    fun getSuggestions(query: String, source: Source): Suggestions
-    fun close()
+class NoOpConsumer<A> : Consumer<A> {
+    override fun consume(value: A): Boolean {
+        // Tell the caller that we haven't taken ownership of this result.
+        return false
+    }
 }

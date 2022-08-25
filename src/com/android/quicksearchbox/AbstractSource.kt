@@ -30,20 +30,20 @@ import android.util.Log
 /**
  * Abstract suggestion source implementation.
  */
-abstract class AbstractSource(context: Context, uiThread: Handler, iconLoader: NamedTaskExecutor) :
-    com.android.quicksearchbox.Source {
-    private val mContext: Context
-    private val mUiThread: Handler
-    private var mIconLoader: com.android.quicksearchbox.IconLoader? = null
+abstract class AbstractSource(context: Context?, uiThread: Handler?, iconLoader: NamedTaskExecutor) :
+    Source {
+    private val mContext: Context?
+    private val mUiThread: Handler?
+    private var mIconLoader: IconLoader? = null
     private val mIconLoaderExecutor: NamedTaskExecutor
-    protected val context: Context
+    protected val context: Context?
         get() = mContext
-    protected val iconLoader: com.android.quicksearchbox.IconLoader?
+    protected val iconLoader: IconLoader?
         get() {
             if (mIconLoader == null) {
                 val iconPackage = iconPackage
-                mIconLoader = com.android.quicksearchbox.CachingIconLoader(
-                    com.android.quicksearchbox.PackageIconLoader(
+                mIconLoader = CachingIconLoader(
+                    PackageIconLoader(
                         mContext,
                         iconPackage,
                         mUiThread,
@@ -67,16 +67,16 @@ abstract class AbstractSource(context: Context, uiThread: Handler, iconLoader: N
 
     @Override
     override fun createSearchIntent(query: String?, appData: Bundle?): Intent? {
-        return AbstractSource.Companion.createSourceSearchIntent(
+        return createSourceSearchIntent(
             intentComponent,
             query,
             appData
         )
     }
 
-    protected fun createVoiceWebSearchIntent(appData: Bundle?): Intent {
-        return com.android.quicksearchbox.QsbApplication.get(mContext).voiceSearch
-            .createVoiceWebSearchIntent(appData)
+    protected fun createVoiceWebSearchIntent(appData: Bundle?): Intent? {
+        return QsbApplication.get(mContext).voiceSearch
+            ?.createVoiceWebSearchIntent(appData)
     }
 
     override fun getRoot(): Source {
@@ -85,10 +85,10 @@ abstract class AbstractSource(context: Context, uiThread: Handler, iconLoader: N
 
     @Override
     override fun equals(other: Any?): Boolean {
-        if (other is com.android.quicksearchbox.Source) {
-            val s: com.android.quicksearchbox.Source =
+        if (other is Source) {
+            val s: Source =
                 other.getRoot()
-            if (s::class.equals(this::class)) {
+            if (s::class == this::class) {
                 return s.name.equals(name)
             }
         }
@@ -115,7 +115,7 @@ abstract class AbstractSource(context: Context, uiThread: Handler, iconLoader: N
         ): Intent? {
             if (activity == null) {
                 Log.w(
-                    AbstractSource.Companion.TAG,
+                    TAG,
                     "Tried to create search intent with no target activity"
                 )
                 return null
