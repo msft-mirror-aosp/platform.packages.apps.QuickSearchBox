@@ -15,17 +15,32 @@
  */
 package com.android.quicksearchbox
 
-/**
- * Provides a set of suggestion results for a query..
- *
- */
-interface SuggestionsProvider {
-    /**
-     * Gets suggestions for a query.
-     *
-     * @param query The query.
-     * @param source The source to query. Must be non-null.
-     */
-    fun getSuggestions(query: String, source: Source): Suggestions
-    fun close()
+import android.app.Application
+
+class QsbApplicationWrapper : Application() {
+
+    private var mApp: QsbApplication? = null
+
+    @Override
+    override fun onTerminate() {
+        synchronized(this) {
+            if (mApp != null) {
+                mApp!!.close()
+            }
+        }
+        super.onTerminate()
+    }
+
+    @get:Synchronized
+    val app: QsbApplication
+        get() {
+            if (mApp == null) {
+                mApp = createQsbApplication()
+            }
+            return mApp!!
+        }
+
+    protected fun createQsbApplication(): QsbApplication {
+        return QsbApplication(this)
+    }
 }
