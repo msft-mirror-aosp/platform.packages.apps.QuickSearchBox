@@ -1,6 +1,12 @@
--keep class com.android.quicksearchbox.preferences.DeviceSearchFragment
+# TODO(b/373579455): Evaluate if <init> needs to be kept.
+-keep class com.android.quicksearchbox.preferences.DeviceSearchFragment {
+  void <init>();
+}
 
--keep class com.android.quicksearchbox.preferences.SearchableItemsFragment
+# TODO(b/373579455): Evaluate if <init> needs to be kept.
+-keep class com.android.quicksearchbox.preferences.SearchableItemsFragment {
+  void <init>();
+}
 
 -keep class com.android.quicksearchbox.util.CachedLater {
   *;
